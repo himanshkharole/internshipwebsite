@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do App</title>
+</head>
+<body>
+    <h1>To-Do App</h1>
+    <input type="text" id="task" placeholder="Enter task here">
+    <button onclick="addTask()">Add</button>
+    <br><br>
+    <div id="pending-tasks">
+        <h2>Pending Tasks</h2>
+        <ul id="pending-list">
+        </ul>
+    </div>
+    <br>
+    <div id="completed-tasks">
+        <h2>Completed Tasks</h2>
+        <ul id="completed-list">
+        </ul>
+    </div>
+
+    <script>
+        let tasks = [];
+        let completedTasks = [];
+
+        function addTask() {
+            let task = document.getElementById("task").value;
+            if (task !== "") {
+                tasks.push(task);
+                showPendingTasks();
+                document.getElementById("task").value = "";
+            }
+        }
+
+        function showPendingTasks() {
+            let pendingTasksList = document.getElementById("pending-list");
+            pendingTasksList.innerHTML = "";
+            for (let i = 0; i < tasks.length; i++) {
+                let li = document.createElement("li");
+                li.innerHTML = tasks[i];
+                li.onclick = function() {
+                    completeTask(i);
+                }
+                pendingTasksList.appendChild(li);
+            }
+        }
+
+        function completeTask(index) {
+            let task = tasks.splice(index, 1);
+            completedTasks.push(task);
+            showPendingTasks();
+            showCompletedTasks();
+        }
+
+        function showCompletedTasks() {
+            let completedTasksList = document.getElementById("completed-list");
+            completedTasksList.innerHTML = "";
+            for (let i = 0; i < completedTasks.length; i++) {
+                let li = document.createElement("li");
+                li.innerHTML = completedTasks[i];
+                li.onclick = function() {
+                    uncompleteTask(i);
+                }
+                completedTasksList.appendChild(li);
+            }
+        }
+
+        function uncompleteTask(index) {
+            let task = completedTasks.splice(index, 1);
+            tasks.push(task);
+            showPendingTasks();
+            showCompletedTasks();
+        }
+    </script>
+</body>
+</html>

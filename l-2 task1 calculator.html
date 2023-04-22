@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Basic Calculator</title>
+	<style>
+		.container {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			grid-template-rows: repeat(5, 1fr);
+			grid-gap: 5px;
+			padding: 10px;
+		}
+
+		.display {
+			grid-column: 1 / span 4;
+			grid-row: 1 / span 2;
+			background-color: #eee;
+			padding: 10px;
+			font-size: 24px;
+			text-align: right;
+			overflow: hidden;
+			word-wrap: break-word;
+		}
+
+		.button {
+			background-color: #ddd;
+			border: none;
+			border-radius: 5px;
+			font-size: 18px;
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		.number {
+			grid-column: span 2;
+		}
+
+		.operator {
+			background-color: #f90;
+		}
+
+		.clear {
+			background-color: #f00;
+			color: #fff;
+		}
+
+		.equal {
+			background-color: #0f0;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="display"></div>
+		<button class="button clear">C</button>
+		<button class="button operator">÷</button>
+		<button class="button number">7</button>
+		<button class="button number">8</button>
+		<button class="button number">9</button>
+		<button class="button operator">*</button>
+		<button class="button number">4</button>
+		<button class="button number">5</button>
+		<button class="button number">6</button>
+		<button class="button operator">-</button>
+		<button class="button number">1</button>
+		<button class="button number">2</button>
+		<button class="button number">3</button>
+		<button class="button operator">+</button>
+		<button class="button number">0</button>
+		<button class="button number decimal">.</button>
+		<button class="button equal">=</button>
+	</div>
+
+	<script>
+		const displayInput = document.querySelector('.display');
+		const buttons = document.querySelectorAll('.button');
+		let firstOperand = '';
+		let secondOperand = '';
+		let operator = null;
+		let result = null;
+		let decimalClicked = false;
+
+		function handleNumberClick(event) {
+			if (operator === null) {
+				firstOperand += event.target.textContent;
+				displayInput.textContent = firstOperand;
+			} else {
+				secondOperand += event.target.textContent;
+				displayInput.textContent = secondOperand;
+			}
+		}
+
+		function handleOperatorClick(event) {
+			if (operator === null) {
+				operator = event.target.textContent;
+			} else if (secondOperand !== '') {
+				calculate();
+				operator = event.target.textContent;
+			}
+		}
+
+		function handleDecimalClick(event) {
+			if (decimalClicked) return;}
+
+			if (operator === null) {
+				if (firstOperand === '') {
+					firstOperand += '0.';
+				} else {
+					firstOperand += '.';
+				}
+				displayInput.textContent = firstOperand;
+			} else 
+				if (secondOperand === '') 
+                {
+					secondOperand += '0.';}
+				else {
+					secondoperand +='.';
+                    displayInput.textContent = secondOperand;}
+                    {
+                    decimalClicked = true;
+	}
+
+	function handleClearClick(event) {
+		firstOperand = '';
+		secondOperand = '';
+		operator = null;
+		result = null;
+		decimalClicked = false;
+		displayInput.textContent = '';
+	}
+
+	function calculate() {
+		const num1 = parseFloat(firstOperand);
+		const num2 = parseFloat(secondOperand);
+
+		switch (operator) {
+			case '+':
+				result = num1 + num2;
+				break;
+			case '-':
+				result = num1 - num2;
+				break;
+			case '*':
+				result = num1 * num2;
+				break;
+			case '÷':
+				result = num1 / num2;
+				break;
+		}
+
+		firstOperand = result.toString();
+		secondOperand = '';
+		displayInput.textContent = result;
+		decimalClicked = false;
+	}
+
+	function handleEqualClick(event) {
+		if (secondOperand === '') return;
+
+		calculate();
+		operator = null;
+	}
+
+	buttons.forEach(button => {
+		if (button.classList.contains('number')) {
+			button.addEventListener('click', handleNumberClick);
+		} else if (button.classList.contains('operator')) {
+			button.addEventListener('click', handleOperatorClick);
+		} else if (button.classList.contains('decimal')) {
+			button.addEventListener('click', handleDecimalClick);
+		} else if (button.classList.contains('clear')) {
+			button.addEventListener('click', handleClearClick);
+		} else if (button.classList.contains('equal')) {
+			button.addEventListener('click', handleEqualClick);
+		}
+	});
+</script>
+
